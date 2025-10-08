@@ -356,12 +356,14 @@ document.addEventListener("mouseup", () => {
 
 const ModalOverlay = document.querySelector("div.modal-overlay");
 
-ModalOverlay.addEventListener("click", () => {
+if(ModalOverlay) {
+    ModalOverlay.addEventListener("click", () => {
     document.querySelectorAll("div.overlay-close").forEach(modal => {
         modal.style.display = "none";
         ModalOverlay.style.display = "none";
     });
 });
+}
 
 const colorSwitcher = document.querySelector("input.color-switcher")
 
