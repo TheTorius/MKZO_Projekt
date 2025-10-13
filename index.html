@@ -69,15 +69,146 @@
                                             umožňuje jeho snadnou integraci do existujících aplikací a služeb, které
                                             používají RTP pro přenos hlasu, videa a jiných multimediálních dat.</li>
                                     </ul>
+
+                                    <br>
                                     <h4>Režimy šifrování</h4>
                                     <ul>
                                         <li>
                                             <h4>SICM (Segment Integer Counter Mode)</h4>
+                                            <ul>
+                                                <li>Šifrovací režim používaný v SRTP pro šifrování RTP payloadu.</li>
+                                                <li>Využívá AES (Advanced Encryption Standard) v režimu CTR (Counter
+                                                    Mode).</li>
+                                                <li>Každý RTP paket je šifrován pomocí unikátního nonce, který je
+                                                    odvozen z SSRC, sekvenčního čísla a dalších polí RTP hlavičky.
+                                                </li>
+                                                <li>Zajišťuje důvěrnost dat tím, že každý paket je šifrován jiným
+                                                    klíčem.</li>
+                                                <li>Umožňuje efektivní a rychlé šifrování a dešifrování dat v reálném
+                                                    čase.</li>
+                                            </ul>
                                         </li>
                                         <li>
                                             <h4>F8 (F8 mode)</h4>
+                                            <ul>
+                                                <li>Alternativní šifrovací režim, který může být použit v SRTP.</li>
+                                                <li>Navržen pro specifické aplikace, kde je potřeba odlišný přístup k
+                                                    šifrování než ten, který nabízí SICM.</li>
+                                                <li>Méně běžně používaný než SICM, ale stále podporovaný v rámci SRTP.
+                                                </li>
+                                                <li>Poskytuje další možnosti pro zabezpečení multimediálních dat v
+                                                    reálném čase.</li>
+                                            </ul>
                                         </li>
                                     </ul>
+
+                                    <br>
+                                    <h4>Formát klíče a odvozené klíče (master key, master salt, session keys)</h4>
+                                    <ul>
+                                        <li><strong>Master Key 16 B (128 bitů):</strong> Hlavní klíč používaný k
+                                            odvození dalších klíčů. Měl by být dostatečně
+                                            dlouhý a náhodný, aby zajistil bezpečnost.</li>
+                                        <li><strong>Master Salt 14 B (112 bitů):</strong> Náhodná hodnota používaná
+                                            spolu s master key k odvození dalších
+                                            klíčů. Pomáhá zvýšit bezpečnost tím, že přidává další vrstvu náhodnosti.
+                                        </li>
+                                        <li><strong>Session Keys 14 B (112 bitů):</strong> Klíče odvozené z master key a
+                                            master salt, které se používají pro
+                                            šifrování a autentizaci jednotlivých mediálních toků. Každý tok může mít
+                                            svůj
+                                            vlastní session key.</li>
+                                        <li><strong>Encryption key 16 B (128 bitů):</strong> Slouží k šifrování RTP
+                                            datového obsahu (payload) pomocí AES v režimu CTR (AES Counter Mode).</li>
+                                        <li><strong>Authentication key 20 B (160 bitů):</strong>Používá se k ověření
+                                            integrity a autenticity paketů (vytváření HMAC-SHA1 tagu).</li>
+                                    </ul>
+                                    <br>
+                                    <h4>Jak se klíče odvozují (KDF) a odvození klíčů (RFC3711)</h4>
+                                    <ul>
+
+                                    </ul>
+
+                                    <br>
+                                    <h4>Co se koduje v SRTP</h4>
+
+                                    <table class="table table-striped">
+                                        <tbody>
+                                            <tr>
+                                                <th>Část paketu</th>
+                                                <th>Šifrováno?</th>
+                                                <th>Šifrovací klíč</th>
+                                                <th>Autentizováno?</th>
+                                                <th>Autentifikační klíč</th>
+                                                <th>Poznámky</th>
+                                            </tr>
+
+
+                                            <tr>
+                                                <td><strong>RTP header</strong><br />(verze, PT, sequence,
+                                                    timestamp, SSRC, atd.)</td>
+                                                <td>Ne (zpravidla zůstává v plaintextu)</td>
+                                                <td>—</td>
+                                                <td>Ano (vybrané header fieldy jsou součástí HMAC)</td>
+                                                <td class="mono">K<sub>a</sub> (authentication key)</td>
+                                                <td>RTP header není běžně šifrován; je však zahrnut do
+                                                    autentizačního výpočtu (HMAC) tak, aby se zabránilo manipulaci s
+                                                    klíčovými poli (SSRC, SEQ, ...).</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td><strong>RTP payload</strong><br />(media — např. kodek
+                                                    audio/video)</td>
+                                                <td>Ano</td>
+                                                <td class="mono">K<sub>e</sub> (encryption key)</td>
+                                                <td>Ano (po šifrování se payload i další položky autentizují)</td>
+                                                <td class="mono">K<sub>a</sub> (authentication key)</td>
+                                                <td>Payload je šifrován AES-CM (CTR) pomocí <span
+                                                        class="mono">K<sub>e</sub></span>. Po šifrování se výsledný
+                                                    ciphertext spolu s příslušnými header poli a ROC zahrne do HMAC.
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td><strong>SRTP authentication tag (ICV / HMAC)</strong></td>
+                                                <td>Ne (tag je přidán na konec paketu)</td>
+                                                <td>—</td>
+                                                <td>— (tag je výsledkem autentizace)</td>
+                                                <td class="mono">K<sub>a</sub> (HMAC-SHA1)</td>
+                                                <td>Tag (např. 80 bitů u AES_CM_128_HMAC_SHA1_80) je výstup HMAC a
+                                                    slouží k ověření integrity a autenticity paketu. Tag se připojí
+                                                    za SRTP paket.</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td><strong>IV / nonce pro AES-CTR</strong></td>
+                                                <td>— (IV není šifrován, je použit při šifrování)</td>
+                                                <td class="mono">K<sub>s</sub> (session salt)</td>
+                                                <td>—</td>
+                                                <td>—</td>
+                                                <td>IV/nonce se konstruuje z <span class="mono">K<sub>s</sub></span>
+                                                    + RTP polí (SSRC, SEQ, ROC). Správné sestavení IV zajišťuje
+                                                    unikátnost nonce pro každý paket.</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td><strong>MKI (Master Key Identifier)</strong></td>
+                                                <td>Ne (atribut/identifikátor)</td>
+                                                <td>—</td>
+                                                <td>Je součástí autentikace, pokud je použit</td>
+                                                <td class="mono">K<sub>a</sub></td>
+                                                <td>Krátký identifikátor (1–4 B) použitý k identifikaci, který
+                                                    master key má přijímač použít (u rekeyingu nebo paralelních
+                                                    klíčů).</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <br>
+                                    <h4>Výměna klíče SRTP</h4>
+                                    <ul>
+
+                                    </ul>
+
 
                                 </div>
                             </div>
@@ -94,6 +225,13 @@
                             <div class="col-1"></div>
                             <div class="col-10">
                                 <h2>Prakticke ukazani</h2>
+                                <div class="noteblock">
+                                    <h4>Implementační poznámky</h4>
+                                    <ul>
+
+                                    </ul>
+
+                                </div>
                             </div>
                             <div class="col-1"></div>
                         </div>
