@@ -204,12 +204,18 @@
                                     </table>
 
                                     <br>
-                                    <h4>Výměna klíče SRTP</h4>
+                                    <h4>Výměna klíče SRTP (Pomocí Diffie-Hellman)</h4>
                                     <ul>
-
+                                        <li>Diffie-Hellman (DH) je kryptografický protokol, který umožňuje dvěma stranám
+                                            bezpečně vyměnit šifrovací klíče přes nezabezpečený kanál.</li>
+                                        <li>Obě strany si nejprve dohodnou na veřejných parametrech, jako je velké prvočíslo a
+                                            generátor.</li>
+                                        <li>Každá strana si poté vygeneruje svůj soukromý klíč a vypočítá svůj veřejný klíč pomocí dohodnutých parametrů.</li>
+                                        <li>Veřejné klíče jsou následně vyměněny mezi oběma stranami.</li>
+                                        <li>Každá strana pak použije svůj soukromý klíč a veřejný klíč druhé strany k výpočtu sdíleného tajemství, které je identické pro obě strany.</li>
+                                        <li>Toto sdílené tajemství je následně použito k odvození šifrovacích klíčů pro zabezpečenou komunikaci.</li>
+                                        <li>Výhodou DH je, že i když je výměna klíčů zachycena třetí stranou, bez znalosti soukromých klíčů obou stran nemůže být sdílené tajemství vypočítáno.</li>
                                     </ul>
-
-
                                 </div>
                             </div>
                             <div class="col-1"></div>
@@ -230,7 +236,10 @@
                                     <ul>
 
                                     </ul>
-
+                                    <h4>Diagram výměny klíče</h4>
+                                    <img src="./images/DiffieHellman.png" alt="SRTP Diagram" style="width:100%; margin-top:2%;">
+                                    <h4>Ukázka odchytnutí klíče a jeho zpětné sestavení</h4>
+                                    <button onclick="showExample()">Zobrazit příklad(doddaní příkladu)</button>
                                 </div>
                             </div>
                             <div class="col-1"></div>
