@@ -7,7 +7,10 @@
     <title>Page Title</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
-    <script src='scripts.js' defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/black.min.css">
+
+
 </head>
 
 <style>
@@ -244,6 +247,25 @@
                             </div>
                             <div class="col-1"></div>
                         </div>
+                        <div class="row" style="height: 500px; z-index: 5000;">
+                            <div class="col-1"></div>
+                            <div class="col-10">
+                                <div class="reveal">
+                                    <div class="slides">
+
+                                        <section>
+                                            <h1>Animace funkčnosti</h1>
+                                            <p>Zprovozněno pomocí frameworku Reveal.js</p>
+                                        </section>
+
+                                        <section>
+                                        </section>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="col-1"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -251,12 +273,24 @@
         </div>
     </article>
 
+
     <footer>
         <div class="footer-tools"><i class="bi bi-javascript"></i><i class="bi bi-css" style="margin-left:2%;"></i>
         </div>
         <div class="footer-redirect"><img src="./images/minitCSS_bg.png" width="23%"></div>
         <div class="footer-copyright">&copy Bc. Lukáš Horák & Bc. Jakub Krčmář</div>
     </footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+
+    <script defer>
+        Reveal.initialize({
+        hash: true,
+        transition: 'slide'   // fade / slide / convex / concave / zoom
+        });
+    </script>
+
+    <script src='scripts.js'></script>
 </body>
 
 </html>
