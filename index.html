@@ -27,7 +27,6 @@
 </style>
 
 <body>
-
     <header
         style="background-image: url('./images/logo.png'); background-repeat: no-repeat; background-position: center center; background-size: 30%;">
         <div class="header-brand"></div>
@@ -46,6 +45,7 @@
 
         </div>
     </header>
+
     <article
         style="background-image: url('./images/logo.png'); background-repeat: no-repeat; background-position: center center; background-size: 75%;">
         <div class="row" style="margin-top: 8%;">
@@ -59,7 +59,7 @@
                         <div class="row">
                             <div class="col-1"></div>
                             <div class="col-10">
-                                <h2>Informatický základ</h2>
+                                <u><h2>Informatický základ</h2></u><br>
                                 <div class="noteblock">
                                     <h4>Co je to SRTP</h4>
                                     <ul>
@@ -130,12 +130,15 @@
                                     <ul>
 
                                     </ul>
+                                </div>
+
 
                                     <br>
-                                    <h4>Co se koduje v SRTP</h4>
-
                                     <table class="table table-striped">
                                         <tbody>
+                                            <tr>
+                                                <td colspan="6"><h4>Co se koduje v SRTP</h4></td>
+                                            </tr>
                                             <tr>
                                                 <th>Část paketu</th>
                                                 <th>Šifrováno?</th>
@@ -207,6 +210,7 @@
                                     </table>
 
                                     <br>
+                                <div class="noteblock">
                                     <h4>Výměna klíče SRTP (Pomocí Diffie-Hellman)</h4>
                                     <ul>
                                         <li>Diffie-Hellman (DH) je kryptografický protokol, který umožňuje dvěma stranám
@@ -233,7 +237,8 @@
                         <div class="row">
                             <div class="col-1"></div>
                             <div class="col-10">
-                                <h2>Prakticke ukazani</h2>
+                                <u><h2>Praktické ukázání</h2></u>
+                                <br>
                                 <div class="noteblock">
                                     <h4>Implementační poznámky</h4>
                                     <ul>
@@ -273,7 +278,6 @@
         </div>
     </article>
 
-
     <footer>
         <div class="footer-tools"><i class="bi bi-javascript"></i><i class="bi bi-css" style="margin-left:2%;"></i>
         </div>
@@ -281,7 +285,7 @@
         <div class="footer-copyright">&copy Bc. Lukáš Horák & Bc. Jakub Krčmář</div>
     </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
 
     <script defer>
         Reveal.initialize({
