@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 
 <head>
@@ -9,17 +9,9 @@
     <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/black.min.css">
-
-
 </head>
 
 <style>
-    .card {
-        background-image: url('./images/logo.png');
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-size: 75%;
-    }
 
     body[data-color='dark'] .card {
         color: black;
@@ -35,14 +27,12 @@
                 <ul>
                     <li><a href="#theory">Informatický základ</a></li>
                     <li><a href="#practice">Praktické ukázání</a></li>
+                    <li><a href="#presentation">Prezentace</a></li>
                 </ul>
             </nav>
         </div>
         <div class="header-right">
-            <div class="header-right">
-                <input class="color-switcher" type="checkbox">
-            </div>
-
+            <input class="color-switcher" type="checkbox">
         </div>
     </header>
 
@@ -60,7 +50,7 @@
                             <div class="col-1"></div>
                             <div class="col-10">
                                 <u><h2 id="theory">Informatický základ</h2></u><br>
-                                <div class="noteblock">
+                                <div class="noteblock noteblock-btn">
                                     <h4>Co je to SRTP</h4>
                                     <ul>
                                         <li>Secure Real-time Transport Protocol (SRTP) je rozšíření protokolu RTP
@@ -252,14 +242,14 @@
                             </div>
                             <div class="col-1"></div>
                         </div>
-                        <div class="row" style="height: 500px; z-index: 5000;">
+                        <div class="row" id="presentation" style="height: 500px;">
                             <div class="col-1"></div>
                             <div class="col-10">
                                 <div class="reveal">
                                     <div class="slides">
 
                                         <section>
-                                            <h1>Animace funkčnosti</h1>
+                                            <h1>Ukázka odchytnutí klíče a jeho zpětné sestavení</h1>
                                             <p>Zprovozněno pomocí frameworku Reveal.js</p>
                                         </section>
 
@@ -271,6 +261,27 @@
                                 </div>
                             <div class="col-1"></div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-1"></div>
+        </div>
+
+        <div class="row">
+            <hr class="hr">
+        </div>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-10">
+                <div class="card">
+                    <div class="card-header">
+                        Zdroje
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li><a href="https://revealjs.com/" style="all: unset; cursor: pointer;">https://revealjs.com/</a></li>
+                            <li><a href="https://gitlab.com/Torius_Minit" style="all: unset; cursor: pointer;">https://gitlab.com/Torius_Minit - MinitCSS by Bc. Lukáš Horák</li>
+                        </ul>
                     </div>
                 </div>
             </div>
