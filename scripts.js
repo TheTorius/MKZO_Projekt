@@ -660,3 +660,181 @@ if(sidebarFloating) {
     });
 }
 
+function modPow(base, exp, mod) {
+    let result = 1;
+    base = base % mod;
+    while (exp > 0) {
+        if (exp % 2 === 1) {
+            result = (result * base) % mod;
+        }
+        base = (base * base) % mod;
+        exp = Math.floor(exp / 2);
+    }
+    return result;
+}
+
+function discreteLog(g, h, p) {
+    const m = Math.ceil(Math.sqrt(p));
+    const baby = new Map();
+    let current = 1;
+    for (let j = 0; j < m; j++) {
+        baby.set(current, j);
+        current = (current * g) % p;
+    }
+    const gInvM = modPow(g, p - 1 - m, p);
+    let giant = h;
+    for (let i = 0; i < m; i++) {
+        if (baby.has(giant)) {
+            return i * m + baby.get(giant);
+        }
+        giant = (giant * gInvM) % p;
+    }
+    return null; // nemělo by nastat
+}
+
+
+
+pVariable = 53
+gVariable = -1
+a_Variable = -1
+AVariable = -1
+BVariable = -1
+KAliceVariable = -1
+KBobVariable = -1
+const delay = (delayInms) => {
+  return new Promise(resolve => setTimeout(resolve, delayInms));
+};
+
+async function showExample(){
+    SelectedTable = document.getElementById("ShowTable")
+
+    SelectedTable.innerHTML =`<thead>
+                                        <tr>
+                                            <th>Krok</th>
+                                            <th>Alice</th>
+                                            <th>Přesun po síti</th>
+                                            <th>Bob</th>
+                                            <th>Zachyceno útočníkem (Mallory)</th>
+                                        </tr>
+                                    </thead>`
+
+    await delay(1000)
+
+    gVariable = Math.floor(Math.random() * (15 - 5 + 1)) + 5;
+
+    SelectedTable.innerHTML += "<tr>"+
+                                "<td>1.</td>"+
+                                "<td>Dohodne se na veřejných parametrech<br>"+
+                                    `<strong>p = ${pVariable}</strong> (prvočíslo)<br>`+
+                                    `<strong>g = ${gVariable}</strong> (generátor)`+
+                                 "</td>"+
+                                `<td>→→→ p = ${pVariable}, g = ${gVariable} →→→</td>`+
+                                `<td>Přijme a souhlasí s p = ${pVariable}, g = ${gVariable}</td>`+
+                                `<td class='table-danger'><strong>p = ${pVariable}, g = ${gVariable}</strong><br>`+
+                                    "(veřejné – vidí je každý)</td>"+
+                             "</tr>"
+
+    await delay(1000)
+
+    a_Variable = Math.floor(Math.random() * (8 - 2 + 1)) + 2;
+
+    AVariable = modPow(gVariable, a_Variable, pVariable);
+
+    SelectedTable.innerHTML +=  `<tr>
+                                <td>2.</td>
+                                <td>Vybere si svoje tajné číslo<br>
+                                <strong>a = ${a_Variable}</strong> (tajné!)<br>
+                                Vypočítá: A = g<sup>a</sup> mod p<br>
+                                A = ${gVariable}<sup>${a_Variable}</sup> mod ${pVariable} = ${gVariable**a_Variable} mod ${pVariable} = <strong>${AVariable}</strong>
+                                </td>
+                                <td>→→→ A = ${AVariable} →→→</td>
+                                <td></td>
+                                <td class='table-danger'><strong>A = ${AVariable}</strong><br>
+                                (veřejná hodnota, útočník ji vidí)</td>
+                                </tr>`
+
+    await delay(1000)
+
+    b_Variable = Math.floor(Math.random() * (8 - 2 + 1)) + 2;
+
+    BVariable = modPow(gVariable, b_Variable, pVariable);
+    
+    SelectedTable.innerHTML +=  `<tr>
+                                <td>3.</td>
+                                <td></td>
+                                <td>←←← B = ${BVariable} ←←←</td>
+                                <td>Vybere si svoje tajné číslo<br>
+                                <strong>b = ${b_Variable}</strong> (tajné!)<br>
+                                Vypočítá: B = g<sup>b</sup> mod p<br>
+                                B = ${gVariable}<sup>${b_Variable}</sup> mod ${pVariable} = <strong>${BVariable}</strong>
+                                </td>
+                                <td class='table-danger'><strong>B = ${BVariable}</strong><br>
+                                (veřejná hodnota, útočník ji vidí)</td>
+                                </tr>`
+
+    await delay(1000)
+
+    KAliceVariable = modPow(BVariable, a_Variable, pVariable);
+    KBobVariable = modPow(AVariable, b_Variable, pVariable);
+
+    SelectedTable.innerHTML +=  `<tr>
+                                <td>4.</td>
+                                <td>Vypočítá sdílený sekret:<br>
+                                K = B<sup>a</sup> mod p<br>
+                                K = ${BVariable}<sup>${a_Variable}</sup> mod ${pVariable} = <strong>${KAliceVariable}</strong></td>
+                                <td>(žádný přenos)</td>
+                                <td>Vypočítá sdílený sekret:<br>
+                                K = A<sup>b</sup> mod p<br>
+                                K = ${AVariable}<sup>${b_Variable}</sup> mod ${pVariable} = <strong>${KBobVariable}</strong></td>
+                                <td class='table-warning'></td>
+                                </tr>`
+
+    await delay(1000)
+    
+    SelectedTable.innerHTML +=  `<tr class='table-success'>
+                                <td>5.</td>
+                                <td colspan='3' class='text-center'><strong>Alice i Bob teď mají společný
+                                tajný klíč K = ${KBobVariable}</strong><br>
+                                Mohou začít šifrovanou komunikaci (např. AES s klíčem odvozeným z ${KBobVariable})
+                                </td>
+                                <td><strong>Útočník viděl jen:</strong><br>
+                                p=${pVariable}, g=${gVariable}, A=${AVariable}, B=${BVariable}<br>
+                                </td>
+                                </tr>`
+
+    decipher()
+}
+
+async function decipher() {
+    log = document.getElementById("Desifrace");
+
+    log.innerHTML = "Útočník zachytil: p, g, A, B\nSpouštím Baby-step Giant-step algoritmus...<br><br>";
+
+    await delay(1000);
+    log.innerHTML += `Zkouším najít tajné 'a' tak, že g^a ≡ ${AVariable} mod ${pVariable}...<br>`;
+    await delay(1000);
+
+    const start = performance.now();
+    const foundA = discreteLog(gVariable, AVariable, pVariable);
+    const timeA = ((performance.now() - start)/1000).toFixed(3);
+
+    log.innerHTML += `Nalezeno! a = ${foundA} (za ${timeA}s)<br><br>`;
+    await delay(1000);
+
+    log.innerHTML += `Nyní hledám b: g^b ≡ ${BVariable} mod ${pVariable}...<br>`;
+    await delay(1000);
+
+    const start2 = performance.now();
+    const foundB = discreteLog(gVariable, BVariable, pVariable);
+    const timeB = ((performance.now() - start2)/1000).toFixed(3);
+
+    log.innerHTML += `Nalezeno! b = ${foundB} (za ${timeB}s)<br><br>`;
+    await delay(1000);
+
+    const crackedK = modPow(BVariable, foundA, pVariable);
+
+    log.innerHTML += `Útočník spočítal sdílený klíč:\nK = ${BVariable}^${foundA} mod ${pVariable} = ${crackedK}<br><br>`;
+    if (crackedK === KBobVariable) {
+        log.innerHTML += `<span class="text-danger fs-4">ÚTOK ÚSPĚŠNÝ! Útočník má stejný klíč jako Alice a Bob!</span>`;
+    }
+}

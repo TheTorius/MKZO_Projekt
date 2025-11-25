@@ -9,11 +9,10 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/black.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/black.min.css">
 </head>
 
 <style>
-
     body[data-color='dark'] .card {
         color: black;
     }
@@ -50,8 +49,10 @@
                             <div class="col-1"></div>
                             <div class="col-10">
                                 <p>
-                                    &emsp; Zde se nachází zadání projektu, které jsme si vybrali, tento projekt pojednává o Methods and technologies for SRTP
-                                 media stream decryption neboli "Metody a technologie pro SRTP šifrování vysílaných obsahů" a jedná se o zadání číslo 5.
+                                    &emsp; Zde se nachází zadání projektu, které jsme si vybrali, tento projekt
+                                    pojednává o Methods and technologies for SRTP
+                                    media stream decryption neboli "Metody a technologie pro SRTP šifrování vysílaných
+                                    obsahů" a jedná se o zadání číslo 5.
                                 </p>
                                 <embed src="./project_1_v1.pdf" width="100%" style="margin-top: 15px; height: 21em;">
                             </div>
@@ -74,7 +75,9 @@
                         <div class="row">
                             <div class="col-1"></div>
                             <div class="col-10">
-                                <u><h2 id="theory">Informatický základ</h2></u><br>
+                                <u>
+                                    <h2 id="theory">Informatický základ</h2>
+                                </u><br>
                                 <div class="noteblock noteblock-btn">
                                     <h4>Co je to SRTP</h4>
                                     <ul>
@@ -148,95 +151,103 @@
                                 </div>
 
 
-                                    <br>
-                                    <table class="table table-striped">
-                                        <tbody>
-                                            <tr>
-                                                <td colspan="6"><h4>Co se koduje v SRTP</h4></td>
-                                            </tr>
-                                            <tr>
-                                                <th>Část paketu</th>
-                                                <th>Šifrováno?</th>
-                                                <th>Šifrovací klíč</th>
-                                                <th>Autentizováno?</th>
-                                                <th>Autentifikační klíč</th>
-                                                <th>Poznámky</th>
-                                            </tr>
+                                <br>
+                                <table class="table table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6">
+                                                <h4>Co se koduje v SRTP</h4>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Část paketu</th>
+                                            <th>Šifrováno?</th>
+                                            <th>Šifrovací klíč</th>
+                                            <th>Autentizováno?</th>
+                                            <th>Autentifikační klíč</th>
+                                            <th>Poznámky</th>
+                                        </tr>
 
 
-                                            <tr>
-                                                <td><strong>RTP header</strong><br />(verze, PT, sequence,
-                                                    timestamp, SSRC, atd.)</td>
-                                                <td>Ne (zpravidla zůstává v plaintextu)</td>
-                                                <td>—</td>
-                                                <td>Ano (vybrané header fieldy jsou součástí HMAC)</td>
-                                                <td class="mono">K<sub>a</sub> (authentication key)</td>
-                                                <td>RTP header není běžně šifrován; je však zahrnut do
-                                                    autentizačního výpočtu (HMAC) tak, aby se zabránilo manipulaci s
-                                                    klíčovými poli (SSRC, SEQ, ...).</td>
-                                            </tr>
+                                        <tr>
+                                            <td><strong>RTP header</strong><br />(verze, PT, sequence,
+                                                timestamp, SSRC, atd.)</td>
+                                            <td>Ne (zpravidla zůstává v plaintextu)</td>
+                                            <td>—</td>
+                                            <td>Ano (vybrané header fieldy jsou součástí HMAC)</td>
+                                            <td class="mono">K<sub>a</sub> (authentication key)</td>
+                                            <td>RTP header není běžně šifrován; je však zahrnut do
+                                                autentizačního výpočtu (HMAC) tak, aby se zabránilo manipulaci s
+                                                klíčovými poli (SSRC, SEQ, ...).</td>
+                                        </tr>
 
-                                            <tr>
-                                                <td><strong>RTP payload</strong><br />(media — např. kodek
-                                                    audio/video)</td>
-                                                <td>Ano</td>
-                                                <td class="mono">K<sub>e</sub> (encryption key)</td>
-                                                <td>Ano (po šifrování se payload i další položky autentizují)</td>
-                                                <td class="mono">K<sub>a</sub> (authentication key)</td>
-                                                <td>Payload je šifrován AES-CM (CTR) pomocí <span
-                                                        class="mono">K<sub>e</sub></span>. Po šifrování se výsledný
-                                                    ciphertext spolu s příslušnými header poli a ROC zahrne do HMAC.
-                                                </td>
-                                            </tr>
+                                        <tr>
+                                            <td><strong>RTP payload</strong><br />(media — např. kodek
+                                                audio/video)</td>
+                                            <td>Ano</td>
+                                            <td class="mono">K<sub>e</sub> (encryption key)</td>
+                                            <td>Ano (po šifrování se payload i další položky autentizují)</td>
+                                            <td class="mono">K<sub>a</sub> (authentication key)</td>
+                                            <td>Payload je šifrován AES-CM (CTR) pomocí <span
+                                                    class="mono">K<sub>e</sub></span>. Po šifrování se výsledný
+                                                ciphertext spolu s příslušnými header poli a ROC zahrne do HMAC.
+                                            </td>
+                                        </tr>
 
-                                            <tr>
-                                                <td><strong>SRTP authentication tag (ICV / HMAC)</strong></td>
-                                                <td>Ne (tag je přidán na konec paketu)</td>
-                                                <td>—</td>
-                                                <td>— (tag je výsledkem autentizace)</td>
-                                                <td class="mono">K<sub>a</sub> (HMAC-SHA1)</td>
-                                                <td>Tag (např. 80 bitů u AES_CM_128_HMAC_SHA1_80) je výstup HMAC a
-                                                    slouží k ověření integrity a autenticity paketu. Tag se připojí
-                                                    za SRTP paket.</td>
-                                            </tr>
+                                        <tr>
+                                            <td><strong>SRTP authentication tag (ICV / HMAC)</strong></td>
+                                            <td>Ne (tag je přidán na konec paketu)</td>
+                                            <td>—</td>
+                                            <td>— (tag je výsledkem autentizace)</td>
+                                            <td class="mono">K<sub>a</sub> (HMAC-SHA1)</td>
+                                            <td>Tag (např. 80 bitů u AES_CM_128_HMAC_SHA1_80) je výstup HMAC a
+                                                slouží k ověření integrity a autenticity paketu. Tag se připojí
+                                                za SRTP paket.</td>
+                                        </tr>
 
-                                            <tr>
-                                                <td><strong>IV / nonce pro AES-CTR</strong></td>
-                                                <td>— (IV není šifrován, je použit při šifrování)</td>
-                                                <td class="mono">K<sub>s</sub> (session salt)</td>
-                                                <td>—</td>
-                                                <td>—</td>
-                                                <td>IV/nonce se konstruuje z <span class="mono">K<sub>s</sub></span>
-                                                    + RTP polí (SSRC, SEQ, ROC). Správné sestavení IV zajišťuje
-                                                    unikátnost nonce pro každý paket.</td>
-                                            </tr>
+                                        <tr>
+                                            <td><strong>IV / nonce pro AES-CTR</strong></td>
+                                            <td>— (IV není šifrován, je použit při šifrování)</td>
+                                            <td class="mono">K<sub>s</sub> (session salt)</td>
+                                            <td>—</td>
+                                            <td>—</td>
+                                            <td>IV/nonce se konstruuje z <span class="mono">K<sub>s</sub></span>
+                                                + RTP polí (SSRC, SEQ, ROC). Správné sestavení IV zajišťuje
+                                                unikátnost nonce pro každý paket.</td>
+                                        </tr>
 
-                                            <tr>
-                                                <td><strong>MKI (Master Key Identifier)</strong></td>
-                                                <td>Ne (atribut/identifikátor)</td>
-                                                <td>—</td>
-                                                <td>Je součástí autentikace, pokud je použit</td>
-                                                <td class="mono">K<sub>a</sub></td>
-                                                <td>Krátký identifikátor (1–4 B) použitý k identifikaci, který
-                                                    master key má přijímač použít (u rekeyingu nebo paralelních
-                                                    klíčů).</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                        <tr>
+                                            <td><strong>MKI (Master Key Identifier)</strong></td>
+                                            <td>Ne (atribut/identifikátor)</td>
+                                            <td>—</td>
+                                            <td>Je součástí autentikace, pokud je použit</td>
+                                            <td class="mono">K<sub>a</sub></td>
+                                            <td>Krátký identifikátor (1–4 B) použitý k identifikaci, který
+                                                master key má přijímač použít (u rekeyingu nebo paralelních
+                                                klíčů).</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
 
-                                    <br>
+                                <br>
                                 <div class="noteblock">
                                     <h4>Výměna klíče SRTP (Pomocí Diffie-Hellman)</h4>
                                     <ul>
                                         <li>Diffie-Hellman (DH) je kryptografický protokol, který umožňuje dvěma stranám
                                             bezpečně vyměnit šifrovací klíče přes nezabezpečený kanál.</li>
-                                        <li>Obě strany si nejprve dohodnou na veřejných parametrech, jako je velké prvočíslo a
+                                        <li>Obě strany si nejprve dohodnou na veřejných parametrech, jako je velké
+                                            prvočíslo a
                                             generátor.</li>
-                                        <li>Každá strana si poté vygeneruje svůj soukromý klíč a vypočítá svůj veřejný klíč pomocí dohodnutých parametrů.</li>
+                                        <li>Každá strana si poté vygeneruje svůj soukromý klíč a vypočítá svůj veřejný
+                                            klíč pomocí dohodnutých parametrů.</li>
                                         <li>Veřejné klíče jsou následně vyměněny mezi oběma stranami.</li>
-                                        <li>Každá strana pak použije svůj soukromý klíč a veřejný klíč druhé strany k výpočtu sdíleného tajemství, které je identické pro obě strany.</li>
-                                        <li>Toto sdílené tajemství je následně použito k odvození šifrovacích klíčů pro zabezpečenou komunikaci.</li>
-                                        <li>Výhodou DH je, že i když je výměna klíčů zachycena třetí stranou, bez znalosti soukromých klíčů obou stran nemůže být sdílené tajemství vypočítáno.</li>
+                                        <li>Každá strana pak použije svůj soukromý klíč a veřejný klíč druhé strany k
+                                            výpočtu sdíleného tajemství, které je identické pro obě strany.</li>
+                                        <li>Toto sdílené tajemství je následně použito k odvození šifrovacích klíčů pro
+                                            zabezpečenou komunikaci.</li>
+                                        <li>Výhodou DH je, že i když je výměna klíčů zachycena třetí stranou, bez
+                                            znalosti soukromých klíčů obou stran nemůže být sdílené tajemství
+                                            vypočítáno.</li>
                                     </ul>
                                 </div>
                             </div>
@@ -252,7 +263,70 @@
                         <div class="row">
                             <div class="col-1"></div>
                             <div class="col-10">
-                                <u><h2 id="practice">Praktické ukázání</h2></u>
+                                <u>
+                                    <h2 id="practice">Praktické ukázání</h2>
+                                </u>
+                                <br>
+                                <table class="table table-bordered table-striped">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th colspan="6" class="text-center fs-4">Kdy a jak rychle jde DH prolomit v
+                                                praxi (2025)</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Velikost modulu p</th>
+                                            <th>Název skupiny</th>
+                                            <th>Čas prolomení diskrétního logaritmu (2025)</th>
+                                            <th>Kdo to dokáže</th>
+                                            <th>Poznámka</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="table-danger">
+                                            <td>≤ 512 bitů</td>
+                                            <td>„toy“</td>
+                                            <td>milisekundy až vteřiny na běžném notebooku</td>
+                                            <td>kdokoli s Pythonem</td>
+                                            <td>Prolomitelný okamžitě</td>
+                                        </tr>
+                                        <tr class="table-warning">
+                                            <td>768 bitů</td>
+                                            <td>slabé</td>
+                                            <td>několik minut až hodin</td>
+                                            <td>student, hobby</td>
+                                            <td>Už se to nedoporučuje</td>
+                                        </tr>
+                                        <tr class="table-warning">
+                                            <td>1024 bitů</td>
+                                            <td>legacy</td>
+                                            <td>několik měsíců až 1–2 roky<br><small>s velmi dobrým HW/SW</small></td>
+                                            <td>univerzity, menší firmy</td>
+                                            <td>V roce 2015–2020 se to ještě používalo</td>
+                                        </tr>
+                                        <tr class="table-success">
+                                            <td>2048 bitů</td>
+                                            <td>standard (2025)</td>
+                                            <td>desítky až stovky let<br><small>i při masivním nasazení GPU/ASIC</small>
+                                            </td>
+                                            <td>žádná známá veřejná síla</td>
+                                            <td>Bezpečné proti klasickým počítačům</td>
+                                        </tr>
+                                        <tr class="table-success">
+                                            <td>3072–4096 bitů</td>
+                                            <td>paranoidní / vládní</td>
+                                            <td>tisíce až miliony let</td>
+                                            <td>nikdo</td>
+                                            <td>Používá se v některých státních systémech</td>
+                                        </tr>
+                                        <tr class="table-info">
+                                            <td>Eliptické křivky<br>(256 bitů ECDH)</td>
+                                            <td>moderní standard<br>(TLS 1.3, Signal, WhatsApp)</td>
+                                            <td>stejná nebo vyšší bezpečnost<br>než 3072–4096 bitů klasického DH</td>
+                                            <td>nikdo<br><small>(pokud není backdoor v křivce)</small></td>
+                                            <td>Dnes nejčastější a nejlepší volba</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                                 <br>
                                 <div class="noteblock">
                                     <h4>Implementační poznámky</h4>
@@ -260,10 +334,93 @@
 
                                     </ul>
                                     <h4>Diagram výměny klíče</h4>
-                                    <img src="./images/DiffieHellman.png" alt="SRTP Diagram" style="width:100%; margin-top:2%;">
-                                    <h4>Ukázka odchytnutí klíče a jeho zpětné sestavení</h4>
-                                    <button onclick="showExample()">Zobrazit příklad(doddaní příkladu)</button>
+                                    <img src="./images/DiffieHellman.png" alt="SRTP Diagram"
+                                        style="width:100%; margin-top:2%;">
+
                                 </div>
+
+                                <br>
+                                <u>
+                                    <h2>Ukázka odchytnutí klíče a jeho zpětné sestavení</h2>
+                                </u>
+                                <button onclick="showExample()">Zobrazit příklad(doddaní příkladu)</button>
+                                <table id="ShowTable" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Krok</th>
+                                            <th>Alice</th>
+                                            <th>Přesun po síti</th>
+                                            <th>Bob</th>
+                                            <th>Zachyceno útočníkem (Mallory)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1.</td>
+                                            <td>Dohodne se na veřejných parametrech<br>
+                                                <strong>p = 23</strong> (prvočíslo)<br>
+                                                <strong>g = 5</strong> (generátor)
+                                            </td>
+                                            <td>→→→ p = 23, g = 5 →→→</td>
+                                            <td>Přijme a souhlasí s p = 23, g = 5</td>
+                                            <td class="table-danger"><strong>p = 23, g = 5</strong><br>
+                                                (veřejné – vidí je každý)</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>2.</td>
+                                            <td>Vybere si svoje tajné číslo<br>
+                                                <strong>a = 4</strong> (tajné!)<br>
+                                                Vypočítá: A = g<sup>a</sup> mod p<br>
+                                                A = 5<sup>4</sup> mod 23 = 625 mod 23 = <strong>4</strong>
+                                            </td>
+                                            <td>→→→ A = 4 →→→</td>
+                                            <td></td>
+                                            <td class="table-danger"><strong>A = 4</strong><br>
+                                                (veřejná hodnota, útočník ji vidí)</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>3.</td>
+                                            <td></td>
+                                            <td>←←← B = 10 ←←←</td>
+                                            <td>Vybere si svoje tajné číslo<br>
+                                                <strong>b = 8</strong> (tajné!)<br>
+                                                Vypočítá: B = g<sup>b</sup> mod p<br>
+                                                B = 5<sup>8</sup> mod 23 = <strong>10</strong>
+                                            </td>
+                                            <td class="table-danger"><strong>B = 10</strong><br>
+                                                (veřejná hodnota, útočník ji vidí)</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>4.</td>
+                                            <td>Vypočítá sdílený sekret:<br>
+                                                K = B<sup>a</sup> mod p<br>
+                                                K = 10<sup>4</sup> mod 23 = <strong>18</strong></td>
+                                            <td>(žádný přenos)</td>
+                                            <td>Vypočítá sdílený sekret:<br>
+                                                K = A<sup>b</sup> mod p<br>
+                                                K = 4<sup>8</sup> mod 23 = <strong>18</strong></td>
+                                            <td class="table-warning"></td>
+                                        </tr>
+
+                                        <tr class="table-success">
+                                            <td>5.</td>
+                                            <td colspan="3" class="text-center"><strong>Alice i Bob teď mají společný
+                                                    tajný klíč K = 18</strong><br>
+                                                Mohou začít šifrovanou komunikaci (např. AES s klíčem odvozeným z 18)
+                                            </td>
+                                            <td><strong>Útočník viděl jen:</strong><br>
+                                                p, g, A=4, B=10<br>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <u>
+                                    <h2>Dešifrace klíče</h2>
+                                </u>
+                                <div id="Desifrace"></div>
                             </div>
                             <div class="col-1"></div>
                         </div>
@@ -281,9 +438,9 @@
                                         <section>
                                         </section>
 
-                                        </div>
                                     </div>
                                 </div>
+                            </div>
                             <div class="col-1"></div>
                         </div>
                     </div>
@@ -301,8 +458,11 @@
                     </div>
                     <div class="card-body">
                         <ul>
-                            <li><a href="https://revealjs.com/" style="all: unset; cursor: pointer;">https://revealjs.com/</a></li>
-                            <li><a href="https://gitlab.com/Torius_Minit" style="all: unset; cursor: pointer;">https://gitlab.com/Torius_Minit - MinitCSS by Bc. Lukáš Horák</li>
+                            <li><a href="https://revealjs.com/"
+                                    style="all: unset; cursor: pointer;">https://revealjs.com/</a></li>
+                            <li><a href="https://gitlab.com/Torius_Minit"
+                                    style="all: unset; cursor: pointer;">https://gitlab.com/Torius_Minit - MinitCSS by
+                                    Bc. Lukáš Horák</li>
                         </ul>
                     </div>
                 </div>
@@ -310,9 +470,11 @@
             <div class="col-1"></div>
         </div>
 
-        <a href="#headerId"><div class="back-button">
-            <i class="bi bi-arrow-bar-up"></i>
-        </div></a>
+        <a href="#headerId">
+            <div class="back-button">
+                <i class="bi bi-arrow-bar-up"></i>
+            </div>
+        </a>
     </article>
 
     <footer>
@@ -326,8 +488,8 @@
 
     <script defer>
         Reveal.initialize({
-        hash: true,
-        transition: 'slide'   // fade / slide / convex / concave / zoom
+            hash: true,
+            transition: 'slide'   // fade / slide / convex / concave / zoom
         });
     </script>
 
