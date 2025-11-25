@@ -2061,3 +2061,44 @@ body[data-color="dark"] .card-table-h nav ul li,
 body[data-color="dark"] .card-table-v nav ul li {
     border-color: white;
 }
+
+/* -------------------------- MKZO Project -------------------------- */
+
+.slides {
+    color: black;
+}
+
+.slides > section > h1 {
+    color: black;
+}
+
+body[data-color="dark"] .slides {
+    color: white;
+}
+
+body[data-color="dark"] .slides > section > h1 {
+    color: white;
+}
+
+.typing-container {
+    text-align: left;
+    overflow: hidden;
+    width: 100%;
+    height: 16px;
+    font-size: 16px;
+    white-space: nowrap;
+    animation: typing 3s steps(72) forwards;
+}
+
+.typing-container-border {
+    border-right: 2px solid black;
+}
+
+@keyframes typing {
+    0% {
+        width: 0ch;
+    }
+    100% {
+        width: 60ch;
+    }
+}

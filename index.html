@@ -45,7 +45,7 @@
                 <div class="card">
                     <div class="card-header">Zadání projektu</div>
                     <div class="card-body">
-                        <div class="row" style="height: 375px;">
+                        <div class="row" style="height: 525px;">
                             <div class="col-1"></div>
                             <div class="col-10">
                                 <p>
@@ -54,7 +54,7 @@
                                     media stream decryption neboli "Metody a technologie pro SRTP šifrování vysílaných
                                     obsahů" a jedná se o zadání číslo 5.
                                 </p>
-                                <embed src="./project_1_v1.pdf" width="100%" style="margin-top: 15px; height: 21em;">
+                                <embed src="./project_1_v1.pdf" width="100%" style="margin-top: 15px; height: 30em;">
                             </div>
                             <div class="col-1"></div>
                         </div>
@@ -78,7 +78,7 @@
                                 <u>
                                     <h2 id="theory">Informatický základ</h2>
                                 </u><br>
-                                <div class="noteblock noteblock-btn">
+                                <div class="noteblock">
                                     <h4>Co je to SRTP</h4>
                                     <ul>
                                         <li>Secure Real-time Transport Protocol (SRTP) je rozšíření protokolu RTP
@@ -222,7 +222,7 @@
                                             <td>—</td>
                                             <td>Je součástí autentikace, pokud je použit</td>
                                             <td class="mono">K<sub>a</sub></td>
-                                            <td>Krátký identifikátor (1–4 B) použitý k identifikaci, který
+                                            <td>Krátký identifikátor (1-4 B) použitý k identifikaci, který
                                                 master key má přijímač použít (u rekeyingu nebo paralelních
                                                 klíčů).</td>
                                         </tr>
@@ -299,9 +299,9 @@
                                         <tr class="table-warning">
                                             <td>1024 bitů</td>
                                             <td>legacy</td>
-                                            <td>několik měsíců až 1–2 roky<br><small>s velmi dobrým HW/SW</small></td>
+                                            <td>několik měsíců až 1-2 roky<br><small>s velmi dobrým HW/SW</small></td>
                                             <td>univerzity, menší firmy</td>
-                                            <td>V roce 2015–2020 se to ještě používalo</td>
+                                            <td>V roce 2015-2020 se to ještě používalo</td>
                                         </tr>
                                         <tr class="table-success">
                                             <td>2048 bitů</td>
@@ -312,7 +312,7 @@
                                             <td>Bezpečné proti klasickým počítačům</td>
                                         </tr>
                                         <tr class="table-success">
-                                            <td>3072–4096 bitů</td>
+                                            <td>3072-4096 bitů</td>
                                             <td>paranoidní / vládní</td>
                                             <td>tisíce až miliony let</td>
                                             <td>nikdo</td>
@@ -321,7 +321,7 @@
                                         <tr class="table-info">
                                             <td>Eliptické křivky<br>(256 bitů ECDH)</td>
                                             <td>moderní standard<br>(TLS 1.3, Signal, WhatsApp)</td>
-                                            <td>stejná nebo vyšší bezpečnost<br>než 3072–4096 bitů klasického DH</td>
+                                            <td>stejná nebo vyšší bezpečnost<br>než 3072-4096 bitů klasického DH</td>
                                             <td>nikdo<br><small>(pokud není backdoor v křivce)</small></td>
                                             <td>Dnes nejčastější a nejlepší volba</td>
                                         </tr>
@@ -341,105 +341,23 @@
 
                                 <br>
                                 <u>
-                                    <h2>Ukázka odchytnutí klíče a jeho zpětné sestavení</h2>
+                                    <h2>Ukázka odchytnutí klíče a jeho zpětné sestavení</h2><br>
                                 </u>
-                                <button onclick="showExample()">Zobrazit příklad(doddaní příkladu)</button>
+                                <button class="form-btn" style="margin-bottom: 10px;" onclick="showExample()">Zobrazit příklad(doddaní příkladu)</button>
                                 <table id="ShowTable" class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Krok</th>
-                                            <th>Alice</th>
-                                            <th>Přesun po síti</th>
-                                            <th>Bob</th>
-                                            <th>Zachyceno útočníkem (Mallory)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1.</td>
-                                            <td>Dohodne se na veřejných parametrech<br>
-                                                <strong>p = 23</strong> (prvočíslo)<br>
-                                                <strong>g = 5</strong> (generátor)
-                                            </td>
-                                            <td>→→→ p = 23, g = 5 →→→</td>
-                                            <td>Přijme a souhlasí s p = 23, g = 5</td>
-                                            <td class="table-danger"><strong>p = 23, g = 5</strong><br>
-                                                (veřejné – vidí je každý)</td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>2.</td>
-                                            <td>Vybere si svoje tajné číslo<br>
-                                                <strong>a = 4</strong> (tajné!)<br>
-                                                Vypočítá: A = g<sup>a</sup> mod p<br>
-                                                A = 5<sup>4</sup> mod 23 = 625 mod 23 = <strong>4</strong>
-                                            </td>
-                                            <td>→→→ A = 4 →→→</td>
-                                            <td></td>
-                                            <td class="table-danger"><strong>A = 4</strong><br>
-                                                (veřejná hodnota, útočník ji vidí)</td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>3.</td>
-                                            <td></td>
-                                            <td>←←← B = 10 ←←←</td>
-                                            <td>Vybere si svoje tajné číslo<br>
-                                                <strong>b = 8</strong> (tajné!)<br>
-                                                Vypočítá: B = g<sup>b</sup> mod p<br>
-                                                B = 5<sup>8</sup> mod 23 = <strong>10</strong>
-                                            </td>
-                                            <td class="table-danger"><strong>B = 10</strong><br>
-                                                (veřejná hodnota, útočník ji vidí)</td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>4.</td>
-                                            <td>Vypočítá sdílený sekret:<br>
-                                                K = B<sup>a</sup> mod p<br>
-                                                K = 10<sup>4</sup> mod 23 = <strong>18</strong></td>
-                                            <td>(žádný přenos)</td>
-                                            <td>Vypočítá sdílený sekret:<br>
-                                                K = A<sup>b</sup> mod p<br>
-                                                K = 4<sup>8</sup> mod 23 = <strong>18</strong></td>
-                                            <td class="table-warning"></td>
-                                        </tr>
-
-                                        <tr class="table-success">
-                                            <td>5.</td>
-                                            <td colspan="3" class="text-center"><strong>Alice i Bob teď mají společný
-                                                    tajný klíč K = 18</strong><br>
-                                                Mohou začít šifrovanou komunikaci (např. AES s klíčem odvozeným z 18)
-                                            </td>
-                                            <td><strong>Útočník viděl jen:</strong><br>
-                                                p, g, A=4, B=10<br>
-                                            </td>
-                                        </tr>
-                                    </tbody>
                                 </table>
                                 <u>
-                                    <h2>Dešifrace klíče</h2>
+                                    <br><h2>Dešifrace klíče</h2><br>
                                 </u>
-                                <div id="Desifrace"></div>
-                            </div>
-                            <div class="col-1"></div>
-                        </div>
-                        <div class="row" id="presentation" style="height: 500px;">
-                            <div class="col-1"></div>
-                            <div class="col-10">
-                                <div class="reveal">
-                                    <div class="slides">
-
-                                        <section>
-                                            <h1>Ukázka odchytnutí klíče a jeho zpětné sestavení</h1>
-                                            <p>Zprovozněno pomocí frameworku Reveal.js</p>
-                                        </section>
-
-                                        <section>
-                                        </section>
-
-                                    </div>
-                                </div>
+                                <ul>
+                                    <div id="Desifrace"></div>
+                                    <div id="Desifrace1"></div>
+                                    <div id="Desifrace2"></div>
+                                    <div id="Desifrace3"></div>
+                                    <div id="Desifrace4"></div>
+                                    <div id="Desifrace5"></div>
+                                    <div id="Desifrace6"></div>
+                                </ul>
                             </div>
                             <div class="col-1"></div>
                         </div>
@@ -459,8 +377,8 @@
                     <div class="card-body">
                         <ul>
                             <li><a href="https://revealjs.com/"
-                                    style="all: unset; cursor: pointer;">https://revealjs.com/</a></li>
-                            <li><a href="https://gitlab.com/Torius_Minit"
+                                    style="all: unset; cursor: pointer;">https://chat.openai.com/</a></li>
+                            <li><a href="https://chat.openai.com/"
                                     style="all: unset; cursor: pointer;">https://gitlab.com/Torius_Minit - MinitCSS by
                                     Bc. Lukáš Horák</li>
                         </ul>

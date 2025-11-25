@@ -718,7 +718,7 @@ async function showExample(){
                                         </tr>
                                     </thead>`
 
-    await delay(1000)
+    await delay(500)
 
     gVariable = Math.floor(Math.random() * (15 - 5 + 1)) + 5;
 
@@ -734,7 +734,7 @@ async function showExample(){
                                     "(veřejné – vidí je každý)</td>"+
                              "</tr>"
 
-    await delay(1000)
+    await delay(4000)
 
     a_Variable = Math.floor(Math.random() * (8 - 2 + 1)) + 2;
 
@@ -753,7 +753,7 @@ async function showExample(){
                                 (veřejná hodnota, útočník ji vidí)</td>
                                 </tr>`
 
-    await delay(1000)
+    await delay(4000)
 
     b_Variable = Math.floor(Math.random() * (8 - 2 + 1)) + 2;
 
@@ -772,7 +772,7 @@ async function showExample(){
                                 (veřejná hodnota, útočník ji vidí)</td>
                                 </tr>`
 
-    await delay(1000)
+    await delay(4000)
 
     KAliceVariable = modPow(BVariable, a_Variable, pVariable);
     KBobVariable = modPow(AVariable, b_Variable, pVariable);
@@ -789,7 +789,7 @@ async function showExample(){
                                 <td class='table-warning'></td>
                                 </tr>`
 
-    await delay(1000)
+    await delay(4000)
     
     SelectedTable.innerHTML +=  `<tr class='table-success'>
                                 <td>5.</td>
@@ -802,39 +802,74 @@ async function showExample(){
                                 </td>
                                 </tr>`
 
+    await delay(4000)
+    
     decipher()
 }
 
 async function decipher() {
     log = document.getElementById("Desifrace");
+    log1 = document.getElementById("Desifrace1");
+    log2 = document.getElementById("Desifrace2");
+    log3 = document.getElementById("Desifrace3");
+    log4 = document.getElementById("Desifrace4");
+    log5 = document.getElementById("Desifrace5");
+    log6 = document.getElementById("Desifrace6");
 
-    log.innerHTML = "Útočník zachytil: p, g, A, B\nSpouštím Baby-step Giant-step algoritmus...<br><br>";
+    log.innerHTML = "Útočník zachytil: p, g, A, B\nSpouštím Baby-step Giant-step algoritmus...</div><br><br>";
+    log.classList.add("typing-container");
+    log.classList.add("typing-container-border");
 
-    await delay(1000);
-    log.innerHTML += `Zkouším najít tajné 'a' tak, že g^a ≡ ${AVariable} mod ${pVariable}...<br>`;
-    await delay(1000);
+
+    await delay(4000);
+    log1.innerHTML = `Zkouším najít tajné 'a' tak, že g^a ≡ ${AVariable} mod ${pVariable}...<br>`;
+    log.classList.remove("typing-container-border");
+    log1.classList.add("typing-container");
+    log1.classList.add("typing-container-border");
+    await delay(4000);
 
     const start = performance.now();
     const foundA = discreteLog(gVariable, AVariable, pVariable);
     const timeA = ((performance.now() - start)/1000).toFixed(3);
 
-    log.innerHTML += `Nalezeno! a = ${foundA} (za ${timeA}s)<br><br>`;
-    await delay(1000);
+    log2.innerHTML = `Nalezeno! a = ${foundA} (za ${timeA}s)<br><br>`;
+    log1.classList.remove("typing-container-border");
+    log2.classList.add("typing-container");
+    log2.classList.add("typing-container-border");
+    await delay(4000);
 
-    log.innerHTML += `Nyní hledám b: g^b ≡ ${BVariable} mod ${pVariable}...<br>`;
-    await delay(1000);
+    log3.innerHTML = `Nyní hledám b: g^b ≡ ${BVariable} mod ${pVariable}...<br>`;
+    log2.classList.remove("typing-container-border");
+    log3.classList.add("typing-container");
+    log3.classList.add("typing-container-border");
+    await delay(4000);
 
     const start2 = performance.now();
     const foundB = discreteLog(gVariable, BVariable, pVariable);
     const timeB = ((performance.now() - start2)/1000).toFixed(3);
 
-    log.innerHTML += `Nalezeno! b = ${foundB} (za ${timeB}s)<br><br>`;
-    await delay(1000);
+    log4.innerHTML = `Nalezeno! b = ${foundB} (za ${timeB}s)<br><br>`;
+    log3.classList.remove("typing-container-border");
+    log4.classList.add("typing-container");
+    log4.classList.add("typing-container-border");
+    await delay(4000);
 
     const crackedK = modPow(BVariable, foundA, pVariable);
 
-    log.innerHTML += `Útočník spočítal sdílený klíč:\nK = ${BVariable}^${foundA} mod ${pVariable} = ${crackedK}<br><br>`;
+    log5.innerHTML = `Útočník spočítal sdílený klíč:\nK = ${BVariable}^${foundA} mod ${pVariable} = ${crackedK}<br><br>`;
+    log4.classList.remove("typing-container-border");
+    log5.classList.add("typing-container");
+    log5.classList.add("typing-container-border");
+
+    await delay(4000);
+
     if (crackedK === KBobVariable) {
-        log.innerHTML += `<span class="text-danger fs-4">ÚTOK ÚSPĚŠNÝ! Útočník má stejný klíč jako Alice a Bob!</span>`;
+        log6.innerHTML = `<span class="text-danger fs-4">ÚTOK ÚSPĚŠNÝ! Útočník má stejný klíč jako Alice a Bob!</span>`;
+        log5.classList.remove("typing-container-border");
+        log6.classList.add("typing-container");
+        log6.classList.add("typing-container-border");
+
+        await delay(4000);
+        log6.classList.remove("typing-container-border");
     }
 }
