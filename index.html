@@ -343,7 +343,14 @@
                                 <u>
                                     <h2>Ukázka odchytnutí klíče a jeho zpětné sestavení</h2><br>
                                 </u>
-                                <button class="form-btn" style="margin-bottom: 10px;" onclick="showExample()">Zobrazit příklad(doddaní příkladu)</button>
+                                <select id="ExampleSelect" class="form-select" onchange="changeExample()" autocomplete="off">
+                                    <option value="0" selected>-- Vyberte příklad --</option>
+                                    <option value="16">Příklad 1: Malý modul p (16 bitů)</option>
+                                    <option value="32">Příklad 2: Střední modul p (32 bitů)</option>
+                                    <option value="64" disabled>Příklad 3: Vetší modul p (64 bitů)</option>
+                                    <option value="215" disabled>Příklad 4: Velký modul p (215 bitů)</option>
+                                </select>
+                                <button class="form-btn" style="margin-bottom: 10px;" onclick="showExample()">Zobrazit příklad</button>
                                 <table id="ShowTable" class="table table-striped">
                                 </table>
                                 <u>

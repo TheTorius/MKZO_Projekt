@@ -661,40 +661,82 @@ if(sidebarFloating) {
 }
 
 function modPow(base, exp, mod) {
-    let result = 1;
-    base = base % mod;
-    while (exp > 0) {
-        if (exp % 2 === 1) {
-            result = (result * base) % mod;
-        }
+    let result = 1n;
+    base %= mod;
+    while (exp > 0n) {
+        if (exp & 1n) result = (result * base) % mod;
         base = (base * base) % mod;
-        exp = Math.floor(exp / 2);
+        exp >>= 1n;
     }
     return result;
 }
 
 function discreteLog(g, h, p) {
-    const m = Math.ceil(Math.sqrt(p));
+    const n = p - 1n;                    // řád grupy
+    let m = sqrtBigInt(n);
+    if (m * m < n) m += 1n;              // zaokrouhlení nahoru
+
     const baby = new Map();
-    let current = 1;
-    for (let j = 0; j < m; j++) {
-        baby.set(current, j);
+    let current = 1n;
+
+    // Baby steps
+    for (let j = 0n; j < m; j++) {
+        baby.set(current.toString(), j);
         current = (current * g) % p;
     }
-    const gInvM = modPow(g, p - 1 - m, p);
-    let giant = h;
-    for (let i = 0; i < m; i++) {
-        if (baby.has(giant)) {
-            return i * m + baby.get(giant);
+
+    // g^(-m) mod p
+    const factor = modPow(g, n - m, p);
+
+    let giant = h % p;
+    for (let i = 0n; i < m; i++) {
+        const key = giant.toString();
+        if (baby.has(key)) {
+            return i * m + baby.get(key);   // nalezený exponent
         }
-        giant = (giant * gInvM) % p;
+        giant = (giant * factor) % p;
     }
-    return null; // nemělo by nastat
+    return null;
+}
+
+// Jednoduchý sqrt pro BigInt (Newtonova metoda)
+function sqrtBigInt(x) {
+    if (x < 0n) throw "negativní";
+    if (x === 0n || x === 1n) return x;
+    let a = 1n;
+    let b = x;
+    while (b - a > 1n) {
+        const mid = (a + b) >> 1n;
+        if (mid * mid <= x) {
+            a = mid;
+        } else {
+            b = mid;
+        }
+    }
+    return a;
+}
+
+function randomBigInt(bits) {
+    const bytes = Math.ceil(bits / 8);
+    const array = new Uint8Array(bytes);
+    crypto.getRandomValues(array);
+    // vynulujeme přebytečné bity nahoře
+    array[0] &= (1 << (bits % 8)) - 1 || 255;
+    let result = 0n;
+    for (const b of array) result = (result << 8n) + BigInt(b);
+    return result;
 }
 
 
+const P_215BIT = 13844819492817931310226993678783369503813450183784349923411712345678912345678912345678912345678912345678912347n;
+const P_64BIT = 18446744073709551557n;
+const P_32BIT = 4294967291n;
+const P_16BIT = 65521n;
+const G = 3n;
 
-pVariable = 53
+selectedPbit=P_16BIT;
+
+pVariable = -1
 gVariable = -1
 a_Variable = -1
 AVariable = -1
@@ -720,7 +762,9 @@ async function showExample(){
 
     await delay(500)
 
-    gVariable = Math.floor(Math.random() * (15 - 5 + 1)) + 5;
+    pVariable = selectedPbit;
+    gVariable = G;
+    //gVariable = Math.floor(Math.random() * (15 - 5 + 1)) + 5;
 
     SelectedTable.innerHTML += "<tr>"+
                                 "<td>1.</td>"+
@@ -735,8 +779,8 @@ async function showExample(){
                              "</tr>"
 
     await delay(4000)
-
-    a_Variable = Math.floor(Math.random() * (8 - 2 + 1)) + 2;
+    a_Variable = randomBigInt(214) % (pVariable - 1n);
+    //a_Variable = Math.floor(Math.random() * (8 - 2 + 1)) + 2;
 
     AVariable = modPow(gVariable, a_Variable, pVariable);
 
@@ -745,7 +789,7 @@ async function showExample(){
                                 <td>Vybere si svoje tajné číslo<br>
                                 <strong>a = ${a_Variable}</strong> (tajné!)<br>
                                 Vypočítá: A = g<sup>a</sup> mod p<br>
-                                A = ${gVariable}<sup>${a_Variable}</sup> mod ${pVariable} = ${gVariable**a_Variable} mod ${pVariable} = <strong>${AVariable}</strong>
+                                A = ${gVariable}<sup>${a_Variable}</sup> =  mod ${pVariable} = <strong>${AVariable}</strong>
                                 </td>
                                 <td>→→→ A = ${AVariable} →→→</td>
                                 <td></td>
@@ -755,7 +799,8 @@ async function showExample(){
 
     await delay(4000)
 
-    b_Variable = Math.floor(Math.random() * (8 - 2 + 1)) + 2;
+    b_Variable = randomBigInt(214) % (pVariable - 1n)
+    //b_Variable = Math.floor(Math.random() * (8 - 2 + 1)) + 2;
 
     BVariable = modPow(gVariable, b_Variable, pVariable);
     
@@ -766,7 +811,7 @@ async function showExample(){
                                 <td>Vybere si svoje tajné číslo<br>
                                 <strong>b = ${b_Variable}</strong> (tajné!)<br>
                                 Vypočítá: B = g<sup>b</sup> mod p<br>
-                                B = ${gVariable}<sup>${b_Variable}</sup> mod ${pVariable} = <strong>${BVariable}</strong>
+                                B = ${gVariable}<sup>${b_Variable}</sup> = <strong>${BVariable}</strong>
                                 </td>
                                 <td class='table-danger'><strong>B = ${BVariable}</strong><br>
                                 (veřejná hodnota, útočník ji vidí)</td>
@@ -818,14 +863,14 @@ async function decipher() {
 
     log.innerHTML = "Útočník zachytil: p, g, A, B\nSpouštím Baby-step Giant-step algoritmus...</div><br><br>";
     log.classList.add("typing-container");
-    log.classList.add("typing-container-border");
+    //log.classList.add("typing-container-border");
 
 
     await delay(4000);
     log1.innerHTML = `Zkouším najít tajné 'a' tak, že g^a ≡ ${AVariable} mod ${pVariable}...<br>`;
-    log.classList.remove("typing-container-border");
+    //log.classList.remove("typing-container-border");
     log1.classList.add("typing-container");
-    log1.classList.add("typing-container-border");
+    //log1.classList.add("typing-container-border");
     await delay(4000);
 
     const start = performance.now();
@@ -833,15 +878,15 @@ async function decipher() {
     const timeA = ((performance.now() - start)/1000).toFixed(3);
 
     log2.innerHTML = `Nalezeno! a = ${foundA} (za ${timeA}s)<br><br>`;
-    log1.classList.remove("typing-container-border");
+    //log1.classList.remove("typing-container-border");
     log2.classList.add("typing-container");
-    log2.classList.add("typing-container-border");
+    //log2.classList.add("typing-container-border");
     await delay(4000);
 
     log3.innerHTML = `Nyní hledám b: g^b ≡ ${BVariable} mod ${pVariable}...<br>`;
-    log2.classList.remove("typing-container-border");
+    //log2.classList.remove("typing-container-border");
     log3.classList.add("typing-container");
-    log3.classList.add("typing-container-border");
+    //log3.classList.add("typing-container-border");
     await delay(4000);
 
     const start2 = performance.now();
@@ -849,17 +894,17 @@ async function decipher() {
     const timeB = ((performance.now() - start2)/1000).toFixed(3);
 
     log4.innerHTML = `Nalezeno! b = ${foundB} (za ${timeB}s)<br><br>`;
-    log3.classList.remove("typing-container-border");
+    //log3.classList.remove("typing-container-border");
     log4.classList.add("typing-container");
-    log4.classList.add("typing-container-border");
+    //log4.classList.add("typing-container-border");
     await delay(4000);
 
     const crackedK = modPow(BVariable, foundA, pVariable);
 
     log5.innerHTML = `Útočník spočítal sdílený klíč:\nK = ${BVariable}^${foundA} mod ${pVariable} = ${crackedK}<br><br>`;
-    log4.classList.remove("typing-container-border");
+    //log4.classList.remove("typing-container-border");
     log5.classList.add("typing-container");
-    log5.classList.add("typing-container-border");
+    //log5.classList.add("typing-container-border");
 
     await delay(4000);
 
@@ -867,9 +912,30 @@ async function decipher() {
         log6.innerHTML = `<span class="text-danger fs-4">ÚTOK ÚSPĚŠNÝ! Útočník má stejný klíč jako Alice a Bob!</span>`;
         log5.classList.remove("typing-container-border");
         log6.classList.add("typing-container");
-        log6.classList.add("typing-container-border");
+        //log6.classList.add("typing-container-border");
 
         await delay(4000);
-        log6.classList.remove("typing-container-border");
+        //log6.classList.remove("typing-container-border");
+    }
+}
+
+
+function changeExample(){
+    selelectValue = document.getElementById("ExampleSelect").value;
+    switch (selelectValue) {
+        case "0":
+            break;
+        case "16":
+            selectedPbit = P_16BIT;
+            break;
+        case "32":
+            selectedPbit = P_32BIT;
+            break;
+        case "64":
+            selectedPbit = P_64BIT;
+            break;
+        case "215":
+            selectedPbit = P_215BIT;
+            break;
     }
 }
